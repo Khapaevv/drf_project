@@ -24,7 +24,7 @@ class User(AbstractUser):
         **NULLABLE,
     )
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
     class Meta:
