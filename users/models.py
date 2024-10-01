@@ -43,7 +43,6 @@ class Payments(models.Model):
     CACH = "Наличные"
     TRANSACTOIN = "Перевод на счет"
 
-
     PAYMENTS_VARIANT = [
         (CACH, "Наличные"),
         (TRANSACTOIN, "Перевод на счет"),
@@ -56,8 +55,11 @@ class Payments(models.Model):
         help_text="Укажите пользователя",
         **NULLABLE,
     )
-    payment_date = models.DateTimeField(verbose_name="Дата и время оплаты",
-        help_text="Введите дату и время оплаты", **NULLABLE)
+    payment_date = models.DateTimeField(
+        verbose_name="Дата и время оплаты",
+        help_text="Введите дату и время оплаты",
+        **NULLABLE,
+    )
 
     paid_course = models.ForeignKey(
         Course,
@@ -71,19 +73,20 @@ class Payments(models.Model):
         on_delete=models.SET_NULL,
         verbose_name="Опалченный урок",
         help_text="Укажите оплаченный урок",
-        **NULLABLE)
+        **NULLABLE,
+    )
 
-    payment_amount = models.PositiveIntegerField(verbose_name="Сумма оплаты", help_text="Введите сумму оплаты", **NULLABLE)
+    payment_amount = models.PositiveIntegerField(
+        verbose_name="Сумма оплаты", help_text="Введите сумму оплаты", **NULLABLE
+    )
 
     payment_method = models.CharField(
-        choices=PAYMENTS_VARIANT,
-        verbose_name="Способ оплаты",
-        **NULLABLE)
+        choices=PAYMENTS_VARIANT, verbose_name="Способ оплаты", **NULLABLE
+    )
 
     class Meta:
         verbose_name = "Платеж"
         verbose_name_plural = "Платежи"
-
 
     def __str__(self):
         return f"Пользователь {self.user}({self.payment_method})"
