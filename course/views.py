@@ -1,37 +1,45 @@
-from rest_framework.generics import (CreateAPIView, DestroyAPIView,
-                                     ListAPIView, RetrieveAPIView,
-                                     UpdateAPIView)
+from rest_framework.generics import (
+    CreateAPIView,
+    DestroyAPIView,
+    ListAPIView,
+    RetrieveAPIView,
+    UpdateAPIView,
+)
 from rest_framework.viewsets import ModelViewSet
 
 from course.models import Course, Lesson
-from course.serializers import CourseSerializer, LessonSerializer
+from course.serializers import (
+    CourseSerializer,
+    CourseDetailSerializer,
+    LessonSerializer,
+)
 
 
-class CourseViewSet(ModelViewSet):
+class LessonViewSet(ModelViewSet):
+    queryset = Lesson.objects.all()
+    serializer_class = LessonSerializer
+
+
+class CourseCreateAPIView(CreateAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
 
-class LessonCreateApiView(CreateAPIView):
-    queryset = Lesson.objects.all()
-    serializer_class = LessonSerializer
+class CourseListAPIView(ListAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
 
 
-class LessonListApiView(ListAPIView):
-    queryset = Lesson.objects.all()
-    serializer_class = LessonSerializer
+class CourseRetrieveAPIView(RetrieveAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseDetailSerializer
 
 
-class LessonRetrieveApiView(RetrieveAPIView):
-    queryset = Lesson.objects.all()
-    serializer_class = LessonSerializer
+class CourseUpdateAPIView(UpdateAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
 
 
-class LessonUpdateApiView(UpdateAPIView):
-    queryset = Lesson.objects.all()
-    serializer_class = LessonSerializer
-
-
-class LessonDestroyApiView(DestroyAPIView):
-    queryset = Lesson.objects.all()
-    serializer_class = LessonSerializer
+class CourseDestroyAPIView(DestroyAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
