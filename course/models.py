@@ -21,6 +21,7 @@ class Course(models.Model):
         **NULLABLE,
     )
 
+
     def __str__(self):
         def __str__(self):
             return f"Название курса {self.name}"
@@ -56,6 +57,7 @@ class Lesson(models.Model):
     course = models.ForeignKey(
         Course, on_delete=models.CASCADE, verbose_name="Курс", **NULLABLE
     )
+
 
     def __str__(self):
         return f"Тема урока {self.name}"

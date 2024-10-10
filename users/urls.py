@@ -5,15 +5,12 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 # from course.views import CourseCreateAPIView, CourseListAPIView, CourseRetrieveAPIView, CourseUpdateAPIView, CourseDestroyAPIView
 from users.apps import UsersConfig
-from users.views import PaymentsViewSet, UserViewSet, UserCreateApiView
+from users.views import UserViewSet, UserCreateApiView
 
 # from course.views import (LessonViewSet)
 
 
 app_name = UsersConfig.name
-
-router_payments = SimpleRouter()
-router_payments.register("payments/", PaymentsViewSet)
 
 router_users = SimpleRouter()
 router_users.register("", UserViewSet)
@@ -26,4 +23,4 @@ urlpatterns = [
 
 
 urlpatterns += router_users.urls
-urlpatterns += router_payments.urls
+
