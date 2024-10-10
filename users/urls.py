@@ -24,5 +24,6 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(permission_classes=(AllowAny,)), name='token_refresh'),
 ]
 
+
 urlpatterns += router_users.urls
 urlpatterns += router_payments.urls
