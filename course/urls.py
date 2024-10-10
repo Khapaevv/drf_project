@@ -2,30 +2,25 @@ from django.urls import path
 from rest_framework.routers import SimpleRouter
 
 from course.apps import CourseConfig
-from course.views import (
-    CourseCreateAPIView,
-    CourseDestroyAPIView,
-    CourseListAPIView,
-    CourseRetrieveAPIView,
-    CourseUpdateAPIView,
-    LessonViewSet,
-)
+from course.views import (CourseViewSet, LessonCreateAPIView,
+                          LessonDestroyAPIView, LessonListAPIView,
+                          LessonRetrieveAPIView, LessonUpdateAPIView)
 
 app_name = CourseConfig.name
 
 router = SimpleRouter()
-router.register("", LessonViewSet)
+router.register("", CourseViewSet)
 
 
 urlpatterns = [
-    path("course/", CourseListAPIView.as_view(), name="course_view"),
-    path("course/<int:pk>/", CourseRetrieveAPIView.as_view(), name="course_retrieve"),
-    path("course/create/", CourseCreateAPIView.as_view(), name="course_create"),
+    path("lesson/", LessonListAPIView.as_view(), name="lesson_view"),
+    path("lesson/<int:pk>/", LessonRetrieveAPIView.as_view(), name="lesson_retrieve"),
+    path("lesson/create/", LessonCreateAPIView.as_view(), name="lesson_create"),
     path(
-        "course/<int:pk>/delete/", CourseDestroyAPIView.as_view(), name="course_delete"
+        "lesson/<int:pk>/delete/", LessonDestroyAPIView.as_view(), name="lesson_delete"
     ),
     path(
-        "course/<int:pk>/update/", CourseUpdateAPIView.as_view(), name="course_update"
+        "lesson/<int:pk>/update/", LessonUpdateAPIView.as_view(), name="lesson_update"
     ),
 ]
 urlpatterns += router.urls

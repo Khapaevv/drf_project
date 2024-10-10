@@ -5,6 +5,7 @@ from users.models import User
 
 NULLABLE = {"blank": True, "null": True}
 
+
 class Payments(models.Model):
     user = models.ForeignKey(
         User,
@@ -38,8 +39,11 @@ class Payments(models.Model):
         verbose_name="Сумма оплаты", help_text="Введите сумму оплаты", **NULLABLE
     )
 
-    payment_method = models.CharField(max_length=30,
-        choices=[('cash', 'Наличными'), ('transfer', 'Перевод на счет')], verbose_name="Способ оплаты", **NULLABLE
+    payment_method = models.CharField(
+        max_length=30,
+        choices=[("cash", "Наличными"), ("transfer", "Перевод на счет")],
+        verbose_name="Способ оплаты",
+        **NULLABLE,
     )
 
     class Meta:

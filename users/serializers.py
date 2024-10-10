@@ -25,6 +25,3 @@ class UserSerializer(ModelSerializer):
             "payments_history",
             "password",
         )
-
-
-

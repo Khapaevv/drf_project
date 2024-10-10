@@ -1,7 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-
 NULLABLE = {"blank": True, "null": True}
 
 
@@ -34,6 +33,4 @@ class User(AbstractUser):
         ordering = ("email",)
 
     def __str__(self):
-        return f"Пользователь {self.email}({self.name})"
-
-
+        return f"Пользователь {self.email}({self.email})"
