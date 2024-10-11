@@ -1,4 +1,3 @@
-from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
 from course.models import Course, Lesson
@@ -9,12 +8,6 @@ class LessonSerializer(ModelSerializer):
         model = Lesson
         fields = "__all__"
 
-
-# class CourseSerializer(ModelSerializer):
-#
-#     class Meta:
-#         model = Course
-#         fields = "__all__"
 
 
 class CourseSerializer(ModelSerializer):
