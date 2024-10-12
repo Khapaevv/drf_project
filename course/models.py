@@ -52,11 +52,9 @@ class Lesson(models.Model):
         help_text="Загрузите картинку",
         **NULLABLE,
     )
-    video = models.FileField(
-        upload_to="course/videos",
-        verbose_name="Видео",
-        help_text="Загрузите видео",
-        **NULLABLE,
+
+    video = models.URLField(
+        max_length=200, verbose_name="Ссылка на видео", **NULLABLE,
     )
     course = models.ForeignKey(
         Course, on_delete=models.CASCADE, verbose_name="Курс", **NULLABLE
