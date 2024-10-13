@@ -55,7 +55,9 @@ class Lesson(models.Model):
     )
 
     video = models.URLField(
-        max_length=200, verbose_name="Ссылка на видео", **NULLABLE,
+        max_length=200,
+        verbose_name="Ссылка на видео",
+        **NULLABLE,
     )
     course = models.ForeignKey(
         Course, on_delete=models.CASCADE, verbose_name="Курс", **NULLABLE
@@ -71,6 +73,7 @@ class Lesson(models.Model):
         verbose_name = "Урок"
         verbose_name_plural = "Уроки"
 
+
 class Subscription(models.Model):
     active_sub = models.BooleanField(
         verbose_name="Активация подписки",
@@ -80,7 +83,9 @@ class Subscription(models.Model):
     course = models.ForeignKey(
         Course, on_delete=models.CASCADE, verbose_name="Курс", **NULLABLE
     )
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Пользователь")
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Пользователь"
+    )
 
     def __str__(self):
         return f"{self.user.email} {self.course.name}"

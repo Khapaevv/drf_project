@@ -3,8 +3,10 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.generics import (CreateAPIView, DestroyAPIView,
                                      ListAPIView, RetrieveAPIView,
                                      UpdateAPIView)
+
 from payments.models import Payments
 from payments.serializers import PaymentsSerializer
+
 
 class PaymentsCreateAPIView(CreateAPIView):
     queryset = Payments.objects.all()
