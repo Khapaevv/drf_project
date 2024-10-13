@@ -4,12 +4,8 @@ from rest_framework.routers import SimpleRouter
 from rest_framework_simplejwt.views import (TokenObtainPairView,
                                             TokenRefreshView)
 
-# from course.views import CourseCreateAPIView, CourseListAPIView, CourseRetrieveAPIView, CourseUpdateAPIView, CourseDestroyAPIView
 from users.apps import UsersConfig
 from users.views import UserCreateApiView, UserViewSet
-
-# from course.views import (LessonViewSet)
-
 
 app_name = UsersConfig.name
 

@@ -1,26 +1,27 @@
 from rest_framework import serializers
-from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
-from course.models import Course, Lesson
+from course.models import Course, Lesson, Subscription
+from course.validators import validate_normal_link
 
 
-class LessonSerializer(ModelSerializer):
+class LessonSerializer(serializers.ModelSerializer):
+    video = serializers.URLField(
+        validators=[validate_normal_link],
+        required=False,
+        allow_blank=True,
+        allow_null=True,
+    )
+
     class Meta:
         model = Lesson
         fields = "__all__"
 
 
-# class CourseSerializer(ModelSerializer):
-#
-#     class Meta:
-#         model = Course
-#         fields = "__all__"
+class CourseSerializer(serializers.ModelSerializer):
 
-
-class CourseSerializer(ModelSerializer):
-
-    lessons_count = SerializerMethodField()
-    lessons = SerializerMethodField()
+    lessons_count = serializers.SerializerMethodField()
+    lessons = serializers.SerializerMethodField()
+    is_subscribed = serializers.SerializerMethodField(read_only=True)
 
     def get_lessons_count(self, course):
         return Lesson.objects.filter(course=course).count()
@@ -31,6 +32,16 @@ class CourseSerializer(ModelSerializer):
             "description",
         )
 
+    def get_is_subscribed(self, course):
+        user = self.context['request'].user
+        return Subscription.objects.all().filter(user=user).filter(course=course).exists()
+
+
     class Meta:
         model = Course
-        fields = ("name", "description", "lessons_count", "lessons")
+        fields = ("name", "description", "lessons_count", "lessons", "is_subscribed")
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subscription
+        fields = '__all__'
