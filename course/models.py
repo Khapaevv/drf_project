@@ -1,5 +1,6 @@
 from django.db import models
 
+from config import settings
 from users.models import User
 
 NULLABLE = {"blank": True, "null": True}
@@ -52,17 +53,17 @@ class Lesson(models.Model):
         help_text="Загрузите картинку",
         **NULLABLE,
     )
-    video = models.FileField(
-        upload_to="course/videos",
-        verbose_name="Видео",
-        help_text="Загрузите видео",
+
+    video = models.URLField(
+        max_length=200,
+        verbose_name="Ссылка на видео",
         **NULLABLE,
     )
     course = models.ForeignKey(
         Course, on_delete=models.CASCADE, verbose_name="Курс", **NULLABLE
     )
     owner = models.ForeignKey(
-        User, on_delete=models.SET_NULL, blank=True, null=True, verbose_name="Владелец"
+        User, on_delete=models.SET_NULL, verbose_name="Владелец", **NULLABLE
     )
 
     def __str__(self):
@@ -71,3 +72,24 @@ class Lesson(models.Model):
     class Meta:
         verbose_name = "Урок"
         verbose_name_plural = "Уроки"
+
+
+class Subscription(models.Model):
+    active_sub = models.BooleanField(
+        verbose_name="Активация подписки",
+        help_text="Подписка активна?",
+        **NULLABLE,
+    )
+    course = models.ForeignKey(
+        Course, on_delete=models.CASCADE, verbose_name="Курс", **NULLABLE
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Пользователь"
+    )
+
+    def __str__(self):
+        return f"{self.user.email} {self.course.name}"
+
+    class Meta:
+        verbose_name = "Подписка"
+        verbose_name_plural = "Подписки"
