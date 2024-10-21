@@ -7,7 +7,8 @@ from rest_framework.viewsets import ModelViewSet
 
 from course.models import Course, Lesson, Subscription
 from course.paginators import CustomPagination
-from course.serializers import CourseSerializer, LessonSerializer, SubscriptionSerializer
+from course.serializers import (CourseSerializer, LessonSerializer,
+                                SubscriptionSerializer)
 from users.permissions import IsModer, IsOwner
 
 
@@ -73,15 +74,15 @@ class SubscriptionCreateAPIView(CreateAPIView):
 
     def post(self, *args, **kwargs):
         user = self.request.user
-        course_id = self.request.data.get('course')
+        course_id = self.request.data.get("course")
         course_item = get_object_or_404(Course, pk=course_id)
         subs_item = Subscription.objects.filter(user=user, course=course_item)
 
         if subs_item.exists():
             subs_item.delete()
-            message = 'Подписка удалена'
+            message = "Подписка удалена"
         else:
             Subscription.objects.create(user=user, course=course_item)
-            message = 'Подписка добавлена'
+            message = "Подписка добавлена"
 
         return Response({"message": message})
