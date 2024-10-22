@@ -7,7 +7,9 @@ from rest_framework.viewsets import ModelViewSet
 
 from course.models import Course, Lesson, Subscription
 from course.paginators import CustomPagination
-from course.serializers import CourseSerializer, LessonSerializer, SubscriptionSerializer
+from course.serializers import (CourseSerializer, LessonSerializer,
+                                SubscriptionSerializer)
+from course.tasks import send_information_about_update_course
 from users.permissions import IsModer, IsOwner
 
 
@@ -15,6 +17,12 @@ class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     pagination_class = CustomPagination
+
+    def get(self, request):
+        queryset = Course.objects.all()
+        paginated_queryset = self.paginate_queryset(queryset)
+        serializer = CourseSerializer(paginated_queryset, many=True)
+        return self.get_paginated_response(serializer.data)
 
     def perform_create(self, serializer):
         new_course = serializer.save()
@@ -29,6 +37,16 @@ class CourseViewSet(ModelViewSet):
         elif self.action == "destroy":
             self.permission_classes = (~IsModer | IsOwner,)
         return super().get_permissions()
+
+    def update(self, request, *args, **kwargs):
+        course = self.get_object()
+        subscription = Subscription.objects.filter(course=course).first()
+        if subscription:
+            send_information_about_update_course.delay(
+                course.name, subscription.user.email
+            )
+
+        return super().update(request, *args, **kwargs)
 
 
 class LessonCreateAPIView(CreateAPIView):
@@ -46,6 +64,12 @@ class LessonListAPIView(ListAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     pagination_class = CustomPagination
+
+    def get(self, request, **kwargs):
+        queryset = Lesson.objects.all()
+        paginated_queryset = self.paginate_queryset(queryset)
+        serializer = LessonSerializer(paginated_queryset, many=True)
+        return self.get_paginated_response(serializer.data)
 
 
 class LessonRetrieveAPIView(RetrieveAPIView):
@@ -73,15 +97,15 @@ class SubscriptionCreateAPIView(CreateAPIView):
 
     def post(self, *args, **kwargs):
         user = self.request.user
-        course_id = self.request.data.get('course')
+        course_id = self.request.data.get("course")
         course_item = get_object_or_404(Course, pk=course_id)
         subs_item = Subscription.objects.filter(user=user, course=course_item)
 
         if subs_item.exists():
             subs_item.delete()
-            message = 'Подписка удалена'
+            message = "Подписка удалена"
         else:
             Subscription.objects.create(user=user, course=course_item)
-            message = 'Подписка добавлена'
+            message = "Подписка добавлена"
 
         return Response({"message": message})
