@@ -23,6 +23,10 @@ class User(AbstractUser):
         help_text="Загрузите аватарку",
         **NULLABLE,
     )
+    last_login = models.DateField(
+        verbose_name="Дата последней авторизации",
+        **NULLABLE,
+    )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
