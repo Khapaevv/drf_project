@@ -22,4 +22,5 @@ COPY pyproject.toml poetry.lock ./
 
 RUN poetry install
 
+
 COPY . .
