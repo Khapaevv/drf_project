@@ -7,7 +7,9 @@ from rest_framework.generics import (CreateAPIView, DestroyAPIView,
 
 from payments.models import Payments
 from payments.serializers import PaymentsSerializer
-from payments.services import create_stripe_product, create_stripe_price, create_stripe_session
+from payments.services import (create_stripe_price, create_stripe_product,
+                               create_stripe_session)
+
 
 class PaymentsCreateAPIView(CreateAPIView):
     queryset = Payments.objects.all()
@@ -17,7 +19,9 @@ class PaymentsCreateAPIView(CreateAPIView):
         payment = serializer.save(user=self.request.user)
 
         if payment.paid_course or payment.paid_lesson:
-            product = payment.paid_course if payment.paid_course else payment.paid_lesson
+            product = (
+                payment.paid_course if payment.paid_course else payment.paid_lesson
+            )
             product_id = create_stripe_product(product)
             price = create_stripe_price(payment.payment_amount, product_id)
             session_id, payment_link = create_stripe_session(price)
@@ -27,7 +31,6 @@ class PaymentsCreateAPIView(CreateAPIView):
             payment.save()
         else:
             raise ValidationError("Выберите курс или урок для оплаты")
-
 
 
 class PaymentsListAPIView(ListAPIView):

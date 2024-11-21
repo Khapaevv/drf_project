@@ -33,15 +33,17 @@ class CourseSerializer(serializers.ModelSerializer):
         )
 
     def get_is_subscribed(self, course):
-        user = self.context['request'].user
-        return Subscription.objects.all().filter(user=user).filter(course=course).exists()
-
+        user = self.context["request"].user
+        return (
+            Subscription.objects.all().filter(user=user).filter(course=course).exists()
+        )
 
     class Meta:
         model = Course
         fields = ("name", "description", "lessons_count", "lessons", "is_subscribed")
 
+
 class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subscription
-        fields = '__all__'
+        fields = "__all__"
